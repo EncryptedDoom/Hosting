@@ -2,8 +2,18 @@
   <head>
     <title>Server</title>
     <script>
-      const io = require('socket.io')(3000);
-      io.on('connect', socket => {
+      const WebSocket = require("ws").Server;
+      const HttpsServer = require('https').createServer;
+      const fs = require("fs");
+
+      server = HttpsServer({
+          cert: fs.readFileSync(config.ssl_cert_path),
+          key: fs.readFileSync(config.ssl_key_path)
+      })
+      socket = new WebSocket({
+          server: server
+      });
+      socket.on('connect', socket => {
       // either with send()
       socket.send('Hello!');
 
